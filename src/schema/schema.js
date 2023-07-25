@@ -3,10 +3,10 @@ const {gql} = require('apollo-server-express')
 const typeDefs = gql`
 	type clothes {
 		productID: ID!
-		name: String!
-		imageUrl:String!
-	    price:String!
-		slug:String!
+		name: String
+		imageUrl:String
+	    price:String
+		slug:String
 	}
 
 

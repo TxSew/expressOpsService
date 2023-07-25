@@ -11,6 +11,7 @@ Product.init({
       slug: { type: DataTypes.STRING ,
       unique: true},
       name: { type: DataTypes.STRING },
+      imageUrl: { type: DataTypes.STRING },
       price: { type: DataTypes.FLOAT },
       quality: { type: DataTypes.INTEGER },
       description: { type: DataTypes.TEXT },
