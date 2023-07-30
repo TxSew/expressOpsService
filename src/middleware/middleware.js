@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken")
 
 class Middleware {
-    verifyCookies(token, next) {
-        jwt.verify(token, process.env.ACCESS_TOKEN,{ ignoreExpiration: true} ,(err, decoded) => {
+    verifyCookies(req, res, next) {
+        jwt.verify(req.token, process.env.ACCESS_TOKEN,{ ignoreExpiration: true} ,(err, decoded) => {
             if (err) {
                 console.log('Token invalid');
               } else {

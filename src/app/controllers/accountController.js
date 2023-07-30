@@ -33,7 +33,7 @@ class AccountController {
           })
           .catch((err) => {
             console.log(err);
-          res.status(401).json({message:"error"})
+            res.status(401).json({ message: "error" });
           });
       });
     });
@@ -44,7 +44,8 @@ class AccountController {
     console.log(Email, Password);
     try {
       const user = await Account.findOne({ where: { Email: Email } });
-      const { dataValues } = user;
+      const { dataValues } = await user;
+      console.log(dataValues);
       if (!dataValues) {
         res.status(404).json("wrong Email");
       }
@@ -52,38 +53,78 @@ class AccountController {
         Password,
         dataValues.Password
       );
+      console.log(validPassword);
       if (!validPassword) {
         res.status(200).json({
           message: "Password is not define",
         });
       }
-      if (dataValues && validPassword) {
+      if (dataValues.role =='1' && validPassword) {
         const token = jwt.sign(
           {
             id: dataValues.id,
-            role: dataValues.role,
-            fistName:dataValues.fistName,
-            Email:dataValues.Email
+            fistName: dataValues.fistName,
+            Email: dataValues.Email,
           },
-          process.env.ACCESS_TOKEN,
+          "ACCESS_TOKEN",
           {
             expiresIn: "1d",
           }
         );
-        req.session.role = dataValues.role
+        // req.session.role = dataValues.role
         const { Password, ...rest } = dataValues;
-         return res.status(200).json({
+        res.status(200).json({
           message: "login success",
           user: rest,
           token: token,
-          session: req.session.role
+          // session: req.session.role
         });
       }
-    } catch {
+       else if(dataValues.role =='0' && validPassword) {
+         const token = jwt.sign(
+          {
+            id: dataValues.id,
+            role: dataValues.role,
+            fistName: dataValues.fistName,
+            Email: dataValues.Email,
+          },
+          "ACCESS_TOKEN",
+          {
+            expiresIn: "1d",
+          }
+        );
+        // req.session.role = dataValues.role
+        const { Password, ...rest } = dataValues;
+        res.status(200).json({
+          message: "login success",
+          user: rest,
+          token: token,
+          // session: req.session.role
+        });
+       }
+    } catch (err) {
       res.status(400).json({
-        message: "error server",
+        message: err,
       });
     }
+  }
+  //verify access
+  verifyCookies(req, res, next) {
+    jwt.verify(
+      req.token,
+      process.env.ACCESS_TOKEN,
+      { ignoreExpiration: true },
+      (err, decoded) => {
+        if (err) {
+          res.json("error", err);
+        } else {
+          console.log("Token valid");
+          res.status(200).json("success");
+          console.log(decoded);
+          next();
+        }
+      }
+    );
   }
 }
 

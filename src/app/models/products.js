@@ -14,7 +14,7 @@ Product.init({
       imageUrl: { type: DataTypes.STRING },
       price: { type: DataTypes.FLOAT },
       quality: { type: DataTypes.INTEGER },
-      description: { type: DataTypes.TEXT },
+      description: { type: DataTypes.STRING },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
