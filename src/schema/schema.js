@@ -7,6 +7,7 @@ const typeDefs = gql`
 		imageUrl:String
 	    price:String
 		slug:String
+		categoryID:String
 	}
 
 
